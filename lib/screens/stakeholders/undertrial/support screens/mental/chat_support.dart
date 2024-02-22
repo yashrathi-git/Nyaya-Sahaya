@@ -26,11 +26,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     }
     final model = GenerativeModel(model: 'gemini-pro', apiKey: apiKey);
     final prompt = TextPart(query);
-    final response = await model.generateContent([
-      Content.text(prompt.text),
-      Content.text(
-          "You are a chatbot, to assist the user regarding their mental health. Talk like a human.")
-    ]);
+    final response = await model.generateContent([Content.text(prompt.text)]);
     setState(() {
       messsages.insert(0, {"data": 0, "message": response.text});
     });
