@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class ChatBotScreen extends StatefulWidget {
   const ChatBotScreen({super.key});
@@ -25,7 +26,11 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     }
     final model = GenerativeModel(model: 'gemini-pro', apiKey: apiKey);
     final prompt = TextPart(query);
-    final response = await model.generateContent([Content.text(prompt.text)]);
+    final response = await model.generateContent([
+      Content.text(prompt.text),
+      Content.text(
+          "You are a chatbot, to assist the user regarding their mental health. Talk like a human.")
+    ]);
     setState(() {
       messsages.insert(0, {"data": 0, "message": response.text});
     });
@@ -124,11 +129,23 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                 width: 10.0,
               ),
               Flexible(
-                  child: Text(
-                message,
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
-              ))
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  decoration: BoxDecoration(
+                    color: data == 0 ? Colors.blue : Colors.orangeAccent,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
+                  ),
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: MarkdownBody(
+                    selectable: true,
+                    data: message,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
